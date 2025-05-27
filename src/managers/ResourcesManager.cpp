@@ -9,6 +9,8 @@
 #undef STB_IMAGE_IMPLEMENTATION
 
 #include "tools/Logger.h"
+#include "tools/GameStorage.h"
+#include "systems/TaskSystem.h"
 
 
 ResourcesManager::ResourcesManager()
@@ -33,7 +35,7 @@ ResourcesManager::~ResourcesManager()
 	LOG("ResourcesManager::~destructor");
 }
 
-std::string ResourcesManager::ReadTextFromFile(const std::string& filePath, bool dontSave)
+std::string ResourcesManager::ReadTextFile(const std::string& filePath, bool dontSave)
 {
 	auto textIterator = m_textFiles.find(filePath);
 	if (textIterator != m_textFiles.end()) {
@@ -59,6 +61,30 @@ ImageData* ResourcesManager::LoadImage(const std::string& imagePath)
 	imageData->data = stbi_load(ResolvePath(imagePath).string().c_str(), &imageData->width, &imageData->height, &imageData->channels, 4);
 	m_images[imagePath].reset(imageData);
 	return m_images[imagePath].get();
+}
+
+void ResourcesManager::AsyncReadTextFile(const std::string& filePath, std::function<void(const std::string&)> callback, bool dontSave)
+{
+	//Globals::GetTaskSystem();
+}
+
+void ResourcesManager::AsyncLoadImage(const std::string& imagePath, std::function<void(ImageData*)> callback)
+{
+	auto imageIt = m_images.find(imagePath);
+	if (imageIt != m_images.end()) {
+		if (callback) callback(imageIt->second.get());
+		return;
+	}
+
+	std::function<ImageData*()> loader = [=]()->ImageData* {
+		ImageData* imageData = new ImageData();
+		stbi_set_flip_vertically_on_load(true);
+		imageData->data = stbi_load(ResolvePath(imagePath).string().c_str(), &imageData->width, &imageData->height, &imageData->channels, 4);
+		m_images[imagePath].reset(imageData);
+		return imageData;
+	};
+
+	Globals::GetSystem<task::TaskSystem>(ESystemType::TASK)->CreateLoadTask(imagePath, loader, callback);
 }
 
 std::string ResourcesManager::ReadText(const std::filesystem::path& filePath)

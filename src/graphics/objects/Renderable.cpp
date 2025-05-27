@@ -56,7 +56,26 @@ namespace graphics {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			ImageData* imgData = Globals::GetImageData(m_texturePath);
+
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, glm::value_ptr(glm::u8vec4(255, 0, 0, 255)));
+
+			Globals::AsyncGetImageData(m_texturePath, [this](ImageData* imgData) {
+				if (imgData) {
+					GLint imgFormat = 0;
+					switch (imgData->channels) {
+					case 1: imgFormat = GL_R; break;
+					case 2: imgFormat = GL_RG; break;
+					case 3: imgFormat = GL_RGB; break;
+					case 4: imgFormat = GL_RGBA; break;
+					}
+					glBindTexture(GL_TEXTURE_2D, m_texture);
+					glTexImage2D(GL_TEXTURE_2D, 0, imgFormat, imgData->width, imgData->height, 0, imgFormat, GL_UNSIGNED_BYTE, imgData->data);
+					glGenerateMipmap(GL_TEXTURE_2D);
+				}
+				LOG("--- Texture loaded and linked to OpenGL, currentTime: %f", Globals::GetTime());
+			});
+
+			/*ImageData* imgData = Globals::GetImageData(m_texturePath);
 			if (imgData) {
 				GLint imgFormat = 0;
 				switch (imgData->channels) {
@@ -68,6 +87,7 @@ namespace graphics {
 				glTexImage2D(GL_TEXTURE_2D, 0, imgFormat, imgData->width, imgData->height, 0, imgFormat, GL_UNSIGNED_BYTE, imgData->data);
 				glGenerateMipmap(GL_TEXTURE_2D);
 			}
+			LOG("--- Texture loaded and linked to OpenGL, currentTime: %f", Globals::GetTime());*/
 		}
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * m_stride, (void*)0);

@@ -6,6 +6,7 @@
 #include "tools/Logger.h"
 #include "GameApp.h"
 #include "tools/GameStorage.h"
+#include "systems/TaskSystem.h"
 #include "managers/ResourcesManager.h"
 #include "managers/ShadersManager.h"
 #include "managers/EventsManager.h"
@@ -38,9 +39,15 @@ const GameStorage* Globals::GetGS()
 	return gs;
 }
 
+
 std::string Globals::ReadTextFile(const std::string& path, bool dontSave)
 {
-	return GetManager<ResourcesManager>(EManagerType::RESOURCES)->ReadTextFromFile(path, dontSave);
+	return GetManager<ResourcesManager>(EManagerType::RESOURCES)->ReadTextFile(path, dontSave);
+}
+
+void Globals::AsyncReadTextFile(const std::string& path, std::function<void(const std::string&)> callback, bool dontSave)
+{
+	GetManager<ResourcesManager>(EManagerType::RESOURCES)->AsyncReadTextFile(path, callback, dontSave);
 }
 
 const std::shared_ptr<graphics::Shader> Globals::GetShader(const std::string& shaderName)
@@ -56,6 +63,11 @@ std::vector<std::shared_ptr<graphics::Shader>> Globals::GetAllShaders()
 ImageData* Globals::GetImageData(const std::string& imagePath)
 {
 	return GetManager<ResourcesManager>(EManagerType::RESOURCES)->LoadImage(imagePath);
+}
+
+void Globals::AsyncGetImageData(const std::string& imagePath, std::function<void(ImageData*)> callback)
+{
+	GetManager<ResourcesManager>(EManagerType::RESOURCES)->AsyncLoadImage(imagePath, callback);
 }
 
 

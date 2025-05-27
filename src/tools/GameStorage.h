@@ -2,7 +2,9 @@
 
 #include <memory>
 
-
+namespace task {
+	class TaskSystem;
+}
 class ResourcesManager;
 class ShadersManager;
 class EventsManager;
@@ -18,6 +20,7 @@ public:
 	void Initialize();
 	void Clear();
 
+	task::TaskSystem* GetTaskSystem() const { return m_taskSystem.get(); }
 	ResourcesManager* GetResourcesManager() const { return m_resources.get(); }
 	ShadersManager* GetShadersManager() const { return m_shaders.get(); }
 	EventsManager* GetEventsManager() const { return m_events.get(); }
@@ -25,6 +28,7 @@ public:
 	CameraManager* GetCameraManager() const { return m_camera.get(); }
 
 private:
+	std::unique_ptr<task::TaskSystem> m_taskSystem;
 	std::unique_ptr<ResourcesManager> m_resources;
 	std::unique_ptr<ShadersManager> m_shaders;
 	std::unique_ptr<EventsManager> m_events;

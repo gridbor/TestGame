@@ -20,6 +20,7 @@ namespace graphics {
 			m_programId = 0;
 			return;
 		}
+
 		m_programId = glCreateProgram();
 		glAttachShader(m_programId, vertexShaderId);
 		glAttachShader(m_programId, fragmentShaderId);

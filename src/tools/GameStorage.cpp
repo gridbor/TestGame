@@ -1,5 +1,6 @@
 #include "GameStorage.h"
 
+#include "systems/TaskSystem.h"
 #include "managers/ResourcesManager.h"
 #include "managers/ShadersManager.h"
 #include "managers/EventsManager.h"
@@ -9,6 +10,7 @@
 
 GameStorage::GameStorage()
 {
+	m_taskSystem = std::make_unique<task::TaskSystem>();
 	m_resources = std::make_unique<ResourcesManager>();
 	m_shaders = std::make_unique<ShadersManager>();
 	m_events = std::make_unique<EventsManager>();
@@ -23,6 +25,7 @@ GameStorage::~GameStorage()
 	m_events.reset();
 	m_shaders.reset();
 	m_resources.reset();
+	m_taskSystem.reset();
 }
 
 void GameStorage::Initialize()

@@ -10,6 +10,7 @@
 
 #include "tools/Logger.h"
 #include "tools/GameStorage.h"
+#include "systems/TaskSystem.h"
 #include "managers/ResourcesManager.h"
 #include "managers/ShadersManager.h"
 #include "managers/EventsManager.h"
@@ -86,6 +87,7 @@ GameApp::~GameApp()
 	if (m_testRect) m_testRect.reset();
 	m_gameStorage->Clear();
 	m_gameStorage.reset();
+	LOG("--- WORKING TIME: %f", glfwGetTime());
 
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
@@ -157,6 +159,7 @@ void GameApp::UpdateGLViewport()
 	glViewport(0, 0, m_width, m_height);
 }
 
+static unsigned int frame_count = 0;
 void GameApp::GameLoop()
 {
 	double currentTime = glfwGetTime();
@@ -165,10 +168,17 @@ void GameApp::GameLoop()
 
 	Update(m_deltaTime);
 	Render();
+
+	frame_count++;
+	if (frame_count > 100) {
+		glfwSetWindowShouldClose(m_window, GLFW_TRUE);
+	}
 }
 
 void GameApp::Update(float deltaTime)
 {
+	Globals::GetSystem<task::TaskSystem>(ESystemType::TASK)->Update();
+
 	Globals::GetManager<EventsManager>(EManagerType::EVENTS)->Update();
 	Globals::GetManager<CameraManager>(EManagerType::CAMERA)->Update(deltaTime);
 

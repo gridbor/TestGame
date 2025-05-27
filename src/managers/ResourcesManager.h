@@ -1,9 +1,11 @@
 #pragma once
 
 #include <filesystem>
+#include <functional>
 #include <unordered_map>
 #include <string>
 #include <memory>
+#include <future>
 
 #include "datas/ImageData.h"
 
@@ -13,8 +15,12 @@ public:
 	ResourcesManager();
 	~ResourcesManager();
 
-	std::string ReadTextFromFile(const std::string& filePath, bool dontSave = false);
+	std::string ReadTextFile(const std::string& filePath, bool dontSave = false);
 	ImageData* LoadImage(const std::string& imagePath);
+
+	// async
+	void AsyncReadTextFile(const std::string& filePath, std::function<void(const std::string&)> callback, bool dontSave = false);
+	void AsyncLoadImage(const std::string& imagePath, std::function<void(ImageData*)> callback);
 
 private:
 	std::string ReadText(const std::filesystem::path& filePath);
