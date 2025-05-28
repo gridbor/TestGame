@@ -84,7 +84,7 @@ namespace graphics {
 		auto shaders = Globals::GetAllShaders();
 		for (auto& shader : shaders) {
 			if (shader) {
-				shader->SetUniform("u_view", m_viewMatrix);
+				shader->SetUniformMatrix("u_view", m_viewMatrix);
 			}
 		}
 	}

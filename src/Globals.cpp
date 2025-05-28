@@ -45,9 +45,9 @@ std::string Globals::ReadTextFile(const std::string& path, bool dontSave)
 	return GetManager<ResourcesManager>(EManagerType::RESOURCES)->ReadTextFile(path, dontSave);
 }
 
-void Globals::AsyncReadTextFile(const std::string& path, std::function<void(const std::string&)> callback, bool dontSave)
+void Globals::AsyncReadTextFile(const std::string& path, std::function<void(const std::string&)> callback)
 {
-	GetManager<ResourcesManager>(EManagerType::RESOURCES)->AsyncReadTextFile(path, callback, dontSave);
+	GetManager<ResourcesManager>(EManagerType::RESOURCES)->AsyncReadTextFile(path, callback);
 }
 
 const std::shared_ptr<graphics::Shader> Globals::GetShader(const std::string& shaderName)

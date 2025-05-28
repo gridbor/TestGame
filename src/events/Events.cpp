@@ -54,4 +54,17 @@ namespace events {
 	}
 	// END: MOUSE_WHEEL
 
+
+	// BEGIN: CUSTOM_EVENT
+	CustomEvent::CustomEvent(const EEventType& type, const std::string& eventName):
+		BaseEvent(type),
+		m_eventName{ eventName }
+	{
+	}
+
+	CustomEvent::~CustomEvent()
+	{
+	}
+	// END: CUSTOM_EVENT
+
 }

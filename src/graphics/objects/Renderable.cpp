@@ -74,20 +74,6 @@ namespace graphics {
 				}
 				LOG("--- Texture loaded and linked to OpenGL, currentTime: %f", Globals::GetTime());
 			});
-
-			/*ImageData* imgData = Globals::GetImageData(m_texturePath);
-			if (imgData) {
-				GLint imgFormat = 0;
-				switch (imgData->channels) {
-				case 1: imgFormat = GL_R; break;
-				case 2: imgFormat = GL_RG; break;
-				case 3: imgFormat = GL_RGB; break;
-				case 4: imgFormat = GL_RGBA; break;
-				}
-				glTexImage2D(GL_TEXTURE_2D, 0, imgFormat, imgData->width, imgData->height, 0, imgFormat, GL_UNSIGNED_BYTE, imgData->data);
-				glGenerateMipmap(GL_TEXTURE_2D);
-			}
-			LOG("--- Texture loaded and linked to OpenGL, currentTime: %f", Globals::GetTime());*/
 		}
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * m_stride, (void*)0);
@@ -99,7 +85,7 @@ namespace graphics {
 			glEnableVertexAttribArray(1);
 
 			if (auto shader = m_shader.lock(); shader != nullptr) {
-				glProgramUniform1i(shader->GetProgramId(), shader->GetLocation(ELocationType::UNIFORM, "u_texture"), 0);
+				shader->SetUniform1i("u_texture", 0);
 			}
 		}
 		else {
@@ -116,8 +102,7 @@ namespace graphics {
 		if (!shader) return;
 
 		shader->Use();
-
-		glUniformMatrix4fv(shader->GetLocation(ELocationType::UNIFORM, "u_model"), 1, GL_FALSE, glm::value_ptr(m_matrix));
+		shader->SetUniformMatrix("u_model", m_matrix);
 
 		if (m_useTexture) {
 			glActiveTexture(GL_TEXTURE0);

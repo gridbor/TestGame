@@ -19,7 +19,7 @@ public:
 	ImageData* LoadImage(const std::string& imagePath);
 
 	// async
-	void AsyncReadTextFile(const std::string& filePath, std::function<void(const std::string&)> callback, bool dontSave = false);
+	void AsyncReadTextFile(const std::string& filePath, std::function<void(const std::string&)> callback);
 	void AsyncLoadImage(const std::string& imagePath, std::function<void(ImageData*)> callback);
 
 private:

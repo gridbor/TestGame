@@ -13,7 +13,8 @@ namespace events {
 		MOUSE_DOWN,
 		MOUSE_UP,
 		MOUSE_WHEEL,
-		MOUSE_MOVE
+		MOUSE_MOVE,
+		CUSTOM
 	};
 
 
@@ -80,5 +81,20 @@ namespace events {
 
 	};
 	// END: MOUSE
+
+
+	// BEGIN: CUSTOM
+	class CustomEvent : public BaseEvent {
+	public:
+		CustomEvent(const EEventType& type, const std::string& eventName);
+		~CustomEvent();
+
+		const std::string& GetName() const { return m_eventName; }
+
+	private:
+		std::string m_eventName;
+
+	};
+	// END: CUSTOM
 
 }

@@ -37,10 +37,10 @@ ResourcesManager::~ResourcesManager()
 
 std::string ResourcesManager::ReadTextFile(const std::string& filePath, bool dontSave)
 {
-	auto textIterator = m_textFiles.find(filePath);
-	if (textIterator != m_textFiles.end()) {
+	auto it = m_textFiles.find(filePath);
+	if (it != m_textFiles.end()) {
 		LOG("Text File \"%s\" found in loaded texts", filePath.c_str());
-		return textIterator->second;
+		return it->second;
 	}
 	std::string text = ReadText(ResolvePath(filePath));
 	if (!dontSave && !text.empty()) {
@@ -63,9 +63,21 @@ ImageData* ResourcesManager::LoadImage(const std::string& imagePath)
 	return m_images[imagePath].get();
 }
 
-void ResourcesManager::AsyncReadTextFile(const std::string& filePath, std::function<void(const std::string&)> callback, bool dontSave)
+void ResourcesManager::AsyncReadTextFile(const std::string& filePath, std::function<void(const std::string&)> callback)
 {
-	//Globals::GetTaskSystem();
+	auto it = m_textFiles.find(filePath);
+	if (it != m_textFiles.end()) {
+		LOG("Text File \"%s\" found in loaded texts", filePath.c_str());
+		callback(it->second);
+		return;
+	}
+
+	std::function<const std::string&()> loader = [=]()->const std::string& {
+		m_textFiles[filePath] = ReadText(ResolvePath(filePath));
+		return m_textFiles[filePath];
+	};
+
+	Globals::GetSystem<task::TaskSystem>(ESystemType::TASK)->CreateLoadTask(filePath, loader, callback);
 }
 
 void ResourcesManager::AsyncLoadImage(const std::string& imagePath, std::function<void(ImageData*)> callback)

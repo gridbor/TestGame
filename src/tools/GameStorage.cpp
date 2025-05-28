@@ -12,8 +12,8 @@ GameStorage::GameStorage()
 {
 	m_taskSystem = std::make_unique<task::TaskSystem>();
 	m_resources = std::make_unique<ResourcesManager>();
-	m_shaders = std::make_unique<ShadersManager>();
 	m_events = std::make_unique<EventsManager>();
+	m_shaders = std::make_unique<ShadersManager>();
 	m_inputs = std::make_unique<InputManager>();
 	m_camera = std::make_unique<CameraManager>();
 }
@@ -22,8 +22,8 @@ GameStorage::~GameStorage()
 {
 	m_camera.reset();
 	m_inputs.reset();
-	m_events.reset();
 	m_shaders.reset();
+	m_events.reset();
 	m_resources.reset();
 	m_taskSystem.reset();
 }

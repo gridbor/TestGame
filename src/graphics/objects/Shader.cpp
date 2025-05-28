@@ -6,16 +6,47 @@
 #include "GameApp.h"
 #include "tools/GameStorage.h"
 #include "managers/ResourcesManager.h"
+#include "events/Events.h"
 
 
 namespace graphics {
 
-	Shader::Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
+	Shader::Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath):
+		m_programId{ 0 },
+		m_vertexPath{ vertexShaderPath },
+		m_fragmentPath{ fragmentShaderPath }
 	{
 		LOG("Shader::constructor");
+		Globals::AsyncReadTextFile(m_vertexPath, [this](const std::string& source) {
+			m_shaderSources.vertex = source;
+			if (m_shaderSources.IsReady()) {
+				StartCompile();
+			}
+		});
+		Globals::AsyncReadTextFile(m_fragmentPath, [this](const std::string& source) {
+			m_shaderSources.fragment = source;
+			if (m_shaderSources.IsReady()) {
+				StartCompile();
+			}
+		});
+	}
 
-		GLuint vertexShaderId = CreateShader(GL_VERTEX_SHADER, Globals::ReadTextFile(vertexShaderPath, true));
-		GLuint fragmentShaderId = CreateShader(GL_FRAGMENT_SHADER, Globals::ReadTextFile(fragmentShaderPath, true));
+	Shader::~Shader()
+	{
+		glUseProgram(0);
+		if (m_programId != 0) {
+			glDeleteProgram(m_programId);
+		}
+		LOG("Shader::~destructor");
+	}
+
+	void Shader::StartCompile()
+	{
+		GLuint vertexShaderId = CreateShader(GL_VERTEX_SHADER, m_shaderSources.vertex);
+		GLuint fragmentShaderId = CreateShader(GL_FRAGMENT_SHADER, m_shaderSources.fragment);
+
+		m_shaderSources.Clear();
+
 		if (vertexShaderId == 0 || fragmentShaderId == 0) {
 			m_programId = 0;
 			return;
@@ -41,19 +72,25 @@ namespace graphics {
 		}
 
 		LOG("Shader Program ID: %u", m_programId);
-	}
 
-	Shader::~Shader()
-	{
-		glUseProgram(0);
-		if (m_programId != 0) {
-			glDeleteProgram(m_programId);
+		if (!m_deferredValues.matrices.empty()) {
+			for (auto& [n, m] : m_deferredValues.matrices) {
+				SetUniformMatrix(n, m);
+			}
+			m_deferredValues.matrices.clear();
 		}
-		LOG("Shader::~destructor");
+
+		if (!m_deferredValues.integers.empty()) {
+			for (auto& [n, i] : m_deferredValues.integers) {
+				SetUniform1i(n, i);
+			}
+			m_deferredValues.integers.clear();
+		}
 	}
 
 	void Shader::Use() const
 	{
+		if (m_programId == 0) return;
 		glUseProgram(m_programId);
 	}
 
@@ -66,9 +103,22 @@ namespace graphics {
 		return -1;
 	}
 
-	void Shader::SetUniform(const std::string& name, const glm::mat4& matrix)
+	void Shader::SetUniformMatrix(const std::string& name, const glm::mat4& matrix)
 	{
+		if (m_programId == 0) {
+			m_deferredValues.matrices[name] = matrix;
+			return;
+		}
 		glProgramUniformMatrix4fv(m_programId, GetLocation(ELocationType::UNIFORM, name), 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	void Shader::SetUniform1i(const std::string& name, int value)
+	{
+		if (m_programId == 0) {
+			m_deferredValues.integers[name] = value;
+			return;
+		}
+		glProgramUniform1i(m_programId, GetLocation(ELocationType::UNIFORM, name), value);
 	}
 
 	GLuint Shader::CreateShader(GLenum type, const std::string& source)

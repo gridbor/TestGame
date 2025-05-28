@@ -109,7 +109,7 @@ void GameApp::UpdateProjection()
 
 	auto shaders = Globals::GetAllShaders();
 	for (auto& shader : shaders) {
-		shader->SetUniform("u_projection", m_projectionMatrix);
+		shader->SetUniformMatrix("u_projection", m_projectionMatrix);
 	}
 }
 
@@ -159,7 +159,6 @@ void GameApp::UpdateGLViewport()
 	glViewport(0, 0, m_width, m_height);
 }
 
-static unsigned int frame_count = 0;
 void GameApp::GameLoop()
 {
 	double currentTime = glfwGetTime();
@@ -168,11 +167,6 @@ void GameApp::GameLoop()
 
 	Update(m_deltaTime);
 	Render();
-
-	frame_count++;
-	if (frame_count > 100) {
-		glfwSetWindowShouldClose(m_window, GLFW_TRUE);
-	}
 }
 
 void GameApp::Update(float deltaTime)

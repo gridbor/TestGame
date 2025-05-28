@@ -61,7 +61,7 @@ public:
 	static T* GetSystem(const ESystemType& systemType);
 
 	static std::string ReadTextFile(const std::string& path, bool dontSave = false);
-	static void AsyncReadTextFile(const std::string& path, std::function<void(const std::string&)> callback, bool dontSave = false);
+	static void AsyncReadTextFile(const std::string& path, std::function<void(const std::string&)> callback);
 	static const std::shared_ptr<graphics::Shader> GetShader(const std::string& shaderName);
 	static std::vector<std::shared_ptr<graphics::Shader>> GetAllShaders();
 	static ImageData* GetImageData(const std::string& imagePath);
