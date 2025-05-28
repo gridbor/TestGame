@@ -13,6 +13,9 @@ class GameStorage;
 namespace graphics {
 	class TestRect;
 }
+namespace mesh {
+	class Cube;
+}
 
 
 class GameApp {
@@ -29,6 +32,8 @@ public:
 
 	void UpdateProjection();
 	void UpdateProjection(float aFov, float aNear, float aFar);
+
+	void ToggleWireMode();
 
 	float GetDeltaTime() const { return m_deltaTime; }
 
@@ -60,11 +65,13 @@ private:
 	float m_deltaTime;
 
 	std::unique_ptr<GameStorage> m_gameStorage;
-	std::unique_ptr<graphics::TestRect> m_testRect;
+	std::unique_ptr<mesh::Cube> m_test;
 
 	float m_fov;
 	float m_near;
 	float m_far;
 	glm::mat4 m_projectionMatrix;
+
+	bool m_wireMode;
 
 };

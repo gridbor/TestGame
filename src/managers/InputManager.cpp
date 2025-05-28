@@ -1,9 +1,10 @@
 #include "InputManager.h"
 
-#include "Globals.h"
-#include "events/Events.h"
-
 #include <GLFW/glfw3.h>
+
+#include "Globals.h"
+#include "GameApp.h"
+#include "events/Events.h"
 
 
 InputManager::InputManager():
@@ -66,8 +67,11 @@ void InputManager::ButtonsHandler(const events::BaseEvent& event)
 		SetInputButton(key, m_buttons[EInputButtonType::MOUSE], false);
 		break;
 	}
-	if (type == events::EEventType::KEY_DOWN && key == GLFW_KEY_ESCAPE) {
-		Globals::ExitGame();
+	if (type == events::EEventType::KEY_DOWN) {
+		switch (key) {
+		case GLFW_KEY_ESCAPE: Globals::ExitGame(); break;
+		case GLFW_KEY_F2: Globals::Get()->GetGame()->ToggleWireMode(); break;
+		}
 	}
 }
 

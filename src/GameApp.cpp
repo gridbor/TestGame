@@ -16,8 +16,9 @@
 #include "managers/EventsManager.h"
 #include "managers/CameraManager.h"
 #include "managers/InputManager.h"
-#include "graphics/objects/TestRect.h"
 #include "events/Events.h"
+#include "graphics/objects/meshes/Quad.h"
+#include "graphics/objects/meshes/Cube.h"
 
 
 void APIENTRY OpenGLDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const char* message, const void* userParam)
@@ -33,10 +34,11 @@ GameApp::GameApp(int w, int h, const std::string& title) :
 	m_title{ title },
 	m_loopLastTime{ 0 },
 	m_gameStorage{ nullptr },
-	m_testRect{ nullptr },
+	m_test{ nullptr },
 	m_fov{ 45.f }, m_near{ 0.1f }, m_far{ 100.f },
 	m_projectionMatrix{},
-	m_deltaTime{ 0.f }
+	m_deltaTime{ 0.f },
+	m_wireMode{ false }
 {
 	LOG("GameApp::constructor\n");
 }
@@ -84,7 +86,7 @@ void GameApp::Initialize()
 
 GameApp::~GameApp()
 {
-	if (m_testRect) m_testRect.reset();
+	if (m_test) m_test.reset();
 	m_gameStorage->Clear();
 	m_gameStorage.reset();
 	LOG("--- WORKING TIME: %f", glfwGetTime());
@@ -121,6 +123,19 @@ void GameApp::UpdateProjection(float aFov, float aNear, float aFar)
 	UpdateProjection();
 }
 
+void GameApp::ToggleWireMode()
+{
+	m_wireMode = !m_wireMode;
+	if (m_wireMode) {
+		glDisable(GL_CULL_FACE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else {
+		glEnable(GL_CULL_FACE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+}
+
 void GameApp::Exit()
 {
 	if (m_window) {
@@ -143,15 +158,14 @@ void GameApp::InitGL()
 	glClearColor(0.25f, 0.25f, 0.25f, 1.f);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	UpdateProjection();
 
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	m_testRect = std::make_unique<graphics::TestRect>();
-	m_testRect->Initialize();
+	m_test = std::make_unique<mesh::Cube>();
+	m_test->Initialize();
 }
 
 void GameApp::UpdateGLViewport()
@@ -185,14 +199,15 @@ void GameApp::Render()
 
 	// TODO: rendering objects sorting with transparent and opaque, for blending transparent sort from back to front
 
-	glDepthMask(GL_FALSE);
-	glEnable(GL_BLEND);
-	if (m_testRect) {
-		m_testRect->SetPosition(glm::vec3(0.f, 0.f, 0.f));
-		m_testRect->SetScale(glm::vec3(2.f, 2.f, 2.f));
-		m_testRect->Render();
+	glDisable(GL_BLEND);
+	if (m_test) {
+		//m_test->SetPosition(glm::vec3(0.f, 0.f, 0.f));
+		//m_test->SetScale(glm::vec3(2.f, 2.f, 2.f));
+		m_test->Render();
 	}
 
+	glDepthMask(GL_FALSE);
+	glEnable(GL_BLEND);
 	Globals::GetManager<CameraManager>(EManagerType::CAMERA)->Render();
 	glDisable(GL_BLEND);
 	glDepthMask(GL_TRUE);
