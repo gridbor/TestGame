@@ -30,8 +30,4 @@ namespace graphics {
 		BaseObject::Render();
 	}
 
-	void Coord::UpdateData(const glm::vec3& f, const glm::vec3& s, const glm::vec3& u)
-	{
-	}
-
 }

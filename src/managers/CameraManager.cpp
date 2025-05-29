@@ -33,6 +33,7 @@ void CameraManager::Initialize()
 	m_cameras["main_camera"]->SetPosition(glm::vec3(0.f, 0.f, 3.f));
 
 	m_cameras["from_side"] = std::make_unique<graphics::Camera>();
+	m_cameras["from_side"]->Initialize();
 	m_cameras["from_side"]->SetPosition(glm::vec3(10.f, 0.f, 10.f));
 	m_cameras["from_side"]->SetRotation(glm::quat(glm::vec3(0.f, glm::pi<float>() * 0.25f, 0.f)));
 

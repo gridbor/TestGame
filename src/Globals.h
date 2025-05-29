@@ -12,7 +12,8 @@ enum class EManagerType : char {
 	SHADERS,
 	EVENTS,
 	INPUT,
-	CAMERA
+	CAMERA,
+	SCENE
 };
 
 enum class ESystemType : char {
@@ -108,6 +109,7 @@ inline T* Globals::GetManager(const EManagerType& managerType)
 	case EManagerType::EVENTS: ptr = GetGS()->GetEventsManager(); break;
 	case EManagerType::INPUT: ptr = GetGS()->GetInputManager(); break;
 	case EManagerType::CAMERA: ptr = GetGS()->GetCameraManager(); break;
+	case EManagerType::SCENE: ptr = GetGS()->GetSceneManager(); break;
 	}
 	if (ptr == nullptr) {
 		char errorMsg[130];

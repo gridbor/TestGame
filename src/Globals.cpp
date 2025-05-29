@@ -11,6 +11,7 @@
 #include "managers/ShadersManager.h"
 #include "managers/EventsManager.h"
 #include "managers/InputManager.h"
+#include "managers/SceneManager.h"
 #include "graphics/objects/Shader.h"
 #include "datas/ImageData.h"
 #include "events/Events.h"

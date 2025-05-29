@@ -10,12 +10,6 @@
 struct GLFWwindow;
 
 class GameStorage;
-namespace graphics {
-	class TestRect;
-}
-namespace mesh {
-	class Cube;
-}
 
 
 class GameApp {
@@ -65,7 +59,6 @@ private:
 	float m_deltaTime;
 
 	std::unique_ptr<GameStorage> m_gameStorage;
-	std::unique_ptr<mesh::Cube> m_test;
 
 	float m_fov;
 	float m_near;

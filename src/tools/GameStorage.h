@@ -10,6 +10,9 @@ class ShadersManager;
 class EventsManager;
 class InputManager;
 class CameraManager;
+namespace scene {
+	class SceneManager;
+}
 
 
 class GameStorage {
@@ -26,6 +29,7 @@ public:
 	EventsManager* GetEventsManager() const { return m_events.get(); }
 	InputManager* GetInputManager() const { return m_inputs.get(); }
 	CameraManager* GetCameraManager() const { return m_camera.get(); }
+	scene::SceneManager* GetSceneManager() const { return m_scenes.get(); }
 
 private:
 	std::unique_ptr<task::TaskSystem> m_taskSystem;
@@ -34,5 +38,6 @@ private:
 	std::unique_ptr<EventsManager> m_events;
 	std::unique_ptr<InputManager> m_inputs;
 	std::unique_ptr<CameraManager> m_camera;
+	std::unique_ptr<scene::SceneManager> m_scenes;
 
 };

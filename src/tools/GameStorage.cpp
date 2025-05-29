@@ -6,6 +6,7 @@
 #include "managers/EventsManager.h"
 #include "managers/CameraManager.h"
 #include "managers/InputManager.h"
+#include "managers/SceneManager.h"
 
 
 GameStorage::GameStorage()
@@ -16,10 +17,12 @@ GameStorage::GameStorage()
 	m_shaders = std::make_unique<ShadersManager>();
 	m_inputs = std::make_unique<InputManager>();
 	m_camera = std::make_unique<CameraManager>();
+	m_scenes = std::make_unique<scene::SceneManager>();
 }
 
 GameStorage::~GameStorage()
 {
+	m_scenes.reset();
 	m_camera.reset();
 	m_inputs.reset();
 	m_shaders.reset();
@@ -33,6 +36,7 @@ void GameStorage::Initialize()
 	m_shaders->Initialize();
 	m_inputs->Initialize();
 	m_camera->Initialize();
+	m_scenes->Initialize();
 }
 
 void GameStorage::Clear()

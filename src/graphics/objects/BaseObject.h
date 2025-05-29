@@ -4,15 +4,14 @@
 #include "Updatable.h"
 #include "Transform.h"
 
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/euler_angles.hpp>
-
 
 namespace graphics {
 
 	class BaseObject : public Renderable, public Updatable, public Transform {
 	protected:
 		BaseObject() :
+			m_manualMatrixUpdate{ false },
+			m_hasTransparency{ false },
 			m_worldUp{ 0.f, 1.f, 0.f },
 			m_worldForward{ 0.f, 0.f, 1.f },
 			m_forward{ 0.f, 0.f, 1.f },
@@ -72,6 +71,8 @@ namespace graphics {
 		const glm::vec3& GetRight() const { return m_right; }
 		const glm::vec3& GetUp() const { return m_up; }
 
+		bool IsTransparent() const { return m_hasTransparency; }
+
 	protected:
 		virtual void UpdateMatrix() {
 			glm::mat4 T = glm::translate(glm::mat4(1.f), m_position);
@@ -87,7 +88,8 @@ namespace graphics {
 		}
 
 	protected:
-		bool m_manualMatrixUpdate = false;
+		bool m_manualMatrixUpdate;
+		bool m_hasTransparency;
 		glm::vec3 m_worldUp;
 		glm::vec3 m_worldForward;
 		glm::vec3 m_forward;

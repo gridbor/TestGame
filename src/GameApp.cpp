@@ -16,9 +16,9 @@
 #include "managers/EventsManager.h"
 #include "managers/CameraManager.h"
 #include "managers/InputManager.h"
+#include "managers/SceneManager.h"
 #include "events/Events.h"
-#include "graphics/objects/meshes/Quad.h"
-#include "graphics/objects/meshes/Cube.h"
+#include "graphics/objects/Shader.h"
 
 
 void APIENTRY OpenGLDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const char* message, const void* userParam)
@@ -34,7 +34,6 @@ GameApp::GameApp(int w, int h, const std::string& title) :
 	m_title{ title },
 	m_loopLastTime{ 0 },
 	m_gameStorage{ nullptr },
-	m_test{ nullptr },
 	m_fov{ 45.f }, m_near{ 0.1f }, m_far{ 100.f },
 	m_projectionMatrix{},
 	m_deltaTime{ 0.f },
@@ -86,10 +85,8 @@ void GameApp::Initialize()
 
 GameApp::~GameApp()
 {
-	if (m_test) m_test.reset();
 	m_gameStorage->Clear();
 	m_gameStorage.reset();
-	LOG("--- WORKING TIME: %f", glfwGetTime());
 
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
@@ -163,9 +160,6 @@ void GameApp::InitGL()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	UpdateProjection();
-
-	m_test = std::make_unique<mesh::Cube>();
-	m_test->Initialize();
 }
 
 void GameApp::UpdateGLViewport()
@@ -188,6 +182,7 @@ void GameApp::Update(float deltaTime)
 	Globals::GetSystem<task::TaskSystem>(ESystemType::TASK)->Update();
 
 	Globals::GetManager<EventsManager>(EManagerType::EVENTS)->Update();
+	Globals::GetManager<scene::SceneManager>(EManagerType::SCENE)->Update(deltaTime);
 	Globals::GetManager<CameraManager>(EManagerType::CAMERA)->Update(deltaTime);
 
 	Globals::GetManager<InputManager>(EManagerType::INPUT)->ResetMouseInputs();
@@ -197,20 +192,16 @@ void GameApp::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// TODO: rendering objects sorting with transparent and opaque, for blending transparent sort from back to front
-
-	glDisable(GL_BLEND);
-	if (m_test) {
-		//m_test->SetPosition(glm::vec3(0.f, 0.f, 0.f));
-		//m_test->SetScale(glm::vec3(2.f, 2.f, 2.f));
-		m_test->Render();
-	}
+	Globals::GetManager<scene::SceneManager>(EManagerType::SCENE)->SceneRender();
 
 	glDepthMask(GL_FALSE);
 	glEnable(GL_BLEND);
+
+	Globals::GetManager<scene::SceneManager>(EManagerType::SCENE)->SceneRenderAlpha();
 	Globals::GetManager<CameraManager>(EManagerType::CAMERA)->Render();
-	glDisable(GL_BLEND);
+
 	glDepthMask(GL_TRUE);
+	glDisable(GL_BLEND);
 
 	glfwSwapBuffers(m_window);
 }
