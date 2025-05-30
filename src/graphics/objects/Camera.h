@@ -40,8 +40,6 @@ namespace graphics {
 		bool m_isMovable;
 		bool m_isRenderDisabled;
 
-		std::unique_ptr<Coord> m_coordOrigin;
-
 	};
 
 }

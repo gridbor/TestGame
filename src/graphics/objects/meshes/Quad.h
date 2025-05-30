@@ -3,6 +3,11 @@
 #include "graphics/objects/BaseObject.h"
 
 
+namespace graphics {
+	class Coord;
+}
+
+
 namespace mesh {
 
 	class Quad : public graphics::BaseObject {

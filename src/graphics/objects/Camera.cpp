@@ -12,13 +12,11 @@ namespace graphics {
 		m_isRenderDisabled{ false }
 	{
 		LOG("Camera::constructor");
-		m_coordOrigin = std::make_unique<Coord>();
 
 		m_worldForward = { 0.f, 0.f, -1.f };
 		m_forward = { 0.f, 0.f, -1.f };
 
 		SetRotation(glm::identity<glm::quat>());
-		m_coordOrigin->SetRotation(m_rotation);
 
 		CalculateVectors();
 	}
@@ -46,8 +44,6 @@ namespace graphics {
 
 		BaseObject::Initialize();
 
-		m_coordOrigin->Initialize();
-
 		CalculateVectors();
 	}
 
@@ -62,19 +58,16 @@ namespace graphics {
 		BaseObject::Render();
 
 		if (!m_inited) return;
-		m_coordOrigin->Render();
 	}
 
 	void Camera::SetPosition(const glm::vec3& vec)
 	{
-		m_coordOrigin->SetPosition(vec);
 		BaseObject::SetPosition(vec);
 		CalculateVectors();
 	}
 
 	void Camera::SetRotation(const glm::quat& rot)
 	{
-		m_coordOrigin->SetRotation(rot);
 		BaseObject::SetRotation(rot);
 		CalculateVectors();
 	}

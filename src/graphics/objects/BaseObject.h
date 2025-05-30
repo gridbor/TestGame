@@ -1,8 +1,11 @@
 #pragma once
 
+#include <memory>
+
 #include "Renderable.h"
 #include "Updatable.h"
 #include "Transform.h"
+#include "helpers/Coord.h"
 
 
 namespace graphics {
@@ -12,6 +15,7 @@ namespace graphics {
 		BaseObject() :
 			m_manualMatrixUpdate{ false },
 			m_hasTransparency{ false },
+			m_coordVisible{ true },
 			m_worldUp{ 0.f, 1.f, 0.f },
 			m_worldForward{ 0.f, 0.f, 1.f },
 			m_forward{ 0.f, 0.f, 1.f },
@@ -20,29 +24,42 @@ namespace graphics {
 			m_pitch{ 0.f },
 			m_yaw{ 0.f },
 			m_roll{ 0.f }
-		{ }
+		{
+			m_coord = std::make_unique<Coord>();
+		}
 
 	public:
-		virtual ~BaseObject() = default;
+		virtual ~BaseObject()
+		{
+			m_coord.reset();
+		}
 
-		virtual void Initialize() override { Renderable::Initialize(); };
-		virtual void Render() override { Renderable::Render(); }
+		virtual void Initialize() override {
+			if (m_coordVisible) m_coord->Initialize();
+			Renderable::Initialize();
+		}
+		virtual void Render() override {
+			if (m_coordVisible) m_coord->Render();
+			Renderable::Render();
+		}
 
-		virtual void Update(float deltaTime) override { };
+		virtual void Update(float deltaTime) override { }
 
 		// TRANSLATE
 		virtual void SetPosition(const glm::vec3& vec) override {
+			if (m_coordVisible) m_coord->SetPosition(vec);
 			m_position = vec;
 			if (!m_manualMatrixUpdate) UpdateMatrix();
-		};
-		virtual const glm::vec3& GetPosition() override { return m_position; };
+		}
+		virtual const glm::vec3& GetPosition() override { return m_position; }
 
 		// ROTATE
 		virtual void SetRotation(const glm::quat& rotation) override {
+			if (m_coordVisible) m_coord->SetRotation(rotation);
 			m_rotation = rotation;
 			if (!m_manualMatrixUpdate) UpdateMatrix();
-		};
-		virtual const glm::quat& GetRotation() override { return m_rotation; };
+		}
+		virtual const glm::quat& GetRotation() override { return m_rotation; }
 
 		virtual void SetPitch(float pitch) {
 			m_pitch = fmodf(pitch, glm::two_pi<float>());
@@ -63,8 +80,8 @@ namespace graphics {
 		virtual void SetScale(const glm::vec3& vec) override {
 			m_scale = vec;
 			if (!m_manualMatrixUpdate) UpdateMatrix();
-		};
-		virtual const glm::vec3& GetScale() override { return m_scale; };
+		}
+		virtual const glm::vec3& GetScale() override { return m_scale; }
 
 		// Direction Vectors
 		const glm::vec3& GetForward() const { return m_forward; }
@@ -90,11 +107,13 @@ namespace graphics {
 	protected:
 		bool m_manualMatrixUpdate;
 		bool m_hasTransparency;
+		bool m_coordVisible;
 		glm::vec3 m_worldUp;
 		glm::vec3 m_worldForward;
 		glm::vec3 m_forward;
 		glm::vec3 m_right;
 		glm::vec3 m_up;
+		std::unique_ptr<Coord> m_coord;
 
 	private:
 		// in radians

@@ -3,7 +3,8 @@
 
 namespace graphics {
 
-	Coord::Coord()
+	Coord::Coord():
+		m_manualMatrixUpdate{ false }
 	{
 		m_elementsDrawMode = GL_LINES;
 	}
@@ -22,12 +23,38 @@ namespace graphics {
 
 		m_shader = Globals::GetShader("default");
 
-		BaseObject::Initialize();
+		Renderable::Initialize();
 	}
 
 	void Coord::Render()
 	{
-		BaseObject::Render();
+		Renderable::Render();
+	}
+
+	void Coord::SetPosition(const glm::vec3& vec)
+	{
+		m_position = vec;
+		if (!m_manualMatrixUpdate) UpdateMatrix();
+	}
+
+	void Coord::SetRotation(const glm::quat& rotation)
+	{
+		m_rotation = rotation;
+		if (!m_manualMatrixUpdate) UpdateMatrix();
+	}
+
+	void Coord::SetScale(const glm::vec3& vec)
+	{
+		m_scale = vec;
+		if (!m_manualMatrixUpdate) UpdateMatrix();
+	}
+
+	void Coord::UpdateMatrix()
+	{
+		glm::mat4 T = glm::translate(glm::mat4(1.f), m_position);
+		glm::mat4 R = glm::mat4_cast(m_rotation);
+		glm::mat4 S = glm::scale(glm::mat4(1.f), m_scale);
+		m_matrix = T * R * S;
 	}
 
 }

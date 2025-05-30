@@ -4,6 +4,7 @@
 #include "GameApp.h"
 #include "tools/GameStorage.h"
 #include "managers/ShadersManager.h"
+#include "graphics/objects/helpers/Coord.h"
 
 
 namespace mesh {
