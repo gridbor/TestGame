@@ -9,7 +9,8 @@
 
 namespace mesh {
 
-	Quad::Quad()
+	Quad::Quad():
+		m_normal{ }
 	{
 		LOG("Quad::constructor");
 	}
@@ -36,11 +37,22 @@ namespace mesh {
 		m_useTexture = false;
 
 		BaseObject::Initialize();
+
+		RefreshNormal();
 	}
 
 	void Quad::Render()
 	{
 		BaseObject::Render();
+	}
+
+	void Quad::RefreshNormal()
+	{
+		glm::vec3 v1 = glm::vec3(m_vertices[0], m_vertices[1], m_vertices[2]);
+		glm::vec3 v2 = glm::vec3(m_vertices[7], m_vertices[8], m_vertices[9]);
+		glm::vec3 v3 = glm::vec3(m_vertices[14], m_vertices[15], m_vertices[16]);
+
+		//TODO: m_normal = glm::normalize(glm::cross())
 	}
 
 }

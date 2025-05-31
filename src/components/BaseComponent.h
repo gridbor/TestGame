@@ -14,6 +14,7 @@ namespace components {
 
 	enum class EComponentType : unsigned char {
 		NONE = 0,
+		COLLISION,
 		PHYSICS_MECHANICS
 	};
 
