@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 
-enum class EInputButtonType : char {
+enum class EInputButtonType : unsigned char {
 	NONE = 0,
 	KEYBOARD,
 	MOUSE

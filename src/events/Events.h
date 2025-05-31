@@ -5,7 +5,7 @@
 
 namespace events {
 
-	enum class EEventType : char {
+	enum class EEventType : unsigned char {
 		NONE = 0,
 		KEY_DOWN,
 		KEY_REPEAT,

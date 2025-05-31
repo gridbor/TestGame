@@ -6,7 +6,7 @@
 #include <functional>
 
 
-enum class EManagerType : char {
+enum class EManagerType : unsigned char {
 	NONE = 0,
 	RESOURCES,
 	SHADERS,
@@ -16,7 +16,7 @@ enum class EManagerType : char {
 	SCENE
 };
 
-enum class ESystemType : char {
+enum class ESystemType : unsigned char {
 	NONE = 0,
 	TASK
 };
@@ -31,10 +31,10 @@ namespace graphics {
 }
 namespace events {
 	class BaseEvent;
-	enum class EEventType : char;
+	enum class EEventType : unsigned char;
 }
 
-enum class EInputButtonType : char;
+enum class EInputButtonType : unsigned char;
 struct MouseMove;
 struct MouseWheel;
 

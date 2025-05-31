@@ -21,9 +21,7 @@ namespace graphics {
 			m_forward{ 0.f, 0.f, 1.f },
 			m_right{ 1.f, 0.f, 0.f },
 			m_up{ 0.f, 1.f, 0.f },
-			m_pitch{ 0.f },
-			m_yaw{ 0.f },
-			m_roll{ 0.f }
+			m_eulerAngles{ }
 		{
 			m_coord = std::make_unique<Coord>();
 		}
@@ -62,19 +60,19 @@ namespace graphics {
 		virtual const glm::quat& GetRotation() override { return m_rotation; }
 
 		virtual void SetPitch(float pitch) {
-			m_pitch = fmodf(pitch, glm::two_pi<float>());
+			m_eulerAngles.x = fmodf(pitch, glm::two_pi<float>());
 		}
-		virtual float GetPitch() const { return m_pitch; }
+		virtual float GetPitch() const { return m_eulerAngles.x; }
 
 		virtual void SetYaw(float yaw) {
-			m_yaw = fmodf(yaw, glm::two_pi<float>());
+			m_eulerAngles.y = fmodf(yaw, glm::two_pi<float>());
 		}
-		virtual float GetYaw() const { return m_yaw; }
+		virtual float GetYaw() const { return m_eulerAngles.y; }
 
 		virtual void SetRoll(float roll) {
-			m_roll = fmodf(roll, glm::two_pi<float>());
+			m_eulerAngles.z = fmodf(roll, glm::two_pi<float>());
 		}
-		virtual float GetRoll() const { return m_roll; }
+		virtual float GetRoll() const { return m_eulerAngles.z; }
 
 		// SCALE
 		virtual void SetScale(const glm::vec3& vec) override {
@@ -117,9 +115,7 @@ namespace graphics {
 
 	private:
 		// in radians
-		float m_pitch;
-		float m_yaw;
-		float m_roll;
+		glm::vec3 m_eulerAngles;
 
 	};
 }

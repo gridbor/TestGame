@@ -9,7 +9,7 @@
 
 namespace graphics {
 
-	enum class ELocationType : char {
+	enum class ELocationType : unsigned char {
 		NONE = 0,
 		ATTRIBUTE,
 		UNIFORM

@@ -18,8 +18,6 @@ namespace graphics {
 	public:
 		virtual ~Renderable();
 
-		bool IsInited() const { return m_inited; }
-
 		virtual void Initialize();
 		virtual void Render();
 
