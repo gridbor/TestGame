@@ -6,6 +6,7 @@
 #include "Updatable.h"
 #include "Transform.h"
 #include "helpers/Coord.h"
+#include "components/BaseComponent.h"
 
 
 namespace graphics {
@@ -30,6 +31,10 @@ namespace graphics {
 		virtual ~BaseObject()
 		{
 			m_coord.reset();
+			for (auto& component : m_components) {
+				component.reset();
+			}
+			m_components.clear();
 		}
 
 		virtual void Initialize() override {
@@ -41,7 +46,11 @@ namespace graphics {
 			Renderable::Render();
 		}
 
-		virtual void Update(float deltaTime) override { }
+		virtual void Update(float deltaTime) override {
+			for (const auto& component : m_components) {
+				component->Update(deltaTime);
+			}
+		}
 
 		// TRANSLATE
 		virtual void SetPosition(const glm::vec3& vec) override {
@@ -112,6 +121,7 @@ namespace graphics {
 		glm::vec3 m_right;
 		glm::vec3 m_up;
 		std::unique_ptr<Coord> m_coord;
+		std::vector<std::unique_ptr<components::BaseComponent>> m_components;
 
 	private:
 		// in radians

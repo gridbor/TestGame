@@ -12,7 +12,7 @@ namespace components {
 		PHYSICS_MECHANICS
 	};
 
-	class BaseComponent {
+	class BaseComponent : public Updatable {
 	protected:
 		BaseComponent(const EComponentType& type):
 			m_type{ type }
@@ -24,7 +24,7 @@ namespace components {
 		const EComponentType& GetType() const { return m_type; }
 		const std::string& GetName() const { return m_name; }
 
-		virtual void Update(float deltaTime) {}
+		virtual void Update(float deltaTime) override { }
 
 	protected:
 		std::string m_name = "BaseComponent";
