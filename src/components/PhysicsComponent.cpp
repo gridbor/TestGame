@@ -1,10 +1,12 @@
 #include "PhysicsComponent.h"
 
+#include "graphics/objects/BaseObject.h"
+
 
 namespace components {
 
-	PhysicsComponent::PhysicsComponent():
-		BaseComponent{ EComponentType::PHYSICS_MECHANICS },
+	PhysicsComponent::PhysicsComponent(graphics::BaseObject* owner):
+		BaseComponent{ EComponentType::PHYSICS_MECHANICS, owner },
 		physics::Mechanics{ }
 	{
 		m_name = "PhysicsComponent";
@@ -17,6 +19,10 @@ namespace components {
 	void PhysicsComponent::Update(float deltaTime)
 	{
 		BaseComponent::Update(deltaTime);
+
+		graphics::BaseObject* owner = GetOwner();
+		if (owner == nullptr) return;
+		owner->SetPosition(FreeFall(deltaTime, owner->GetPosition()));
 	}
 
 }

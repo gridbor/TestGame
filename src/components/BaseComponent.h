@@ -5,6 +5,11 @@
 #include "graphics/objects/Updatable.h"
 
 
+namespace graphics {
+	class BaseObject;
+}
+
+
 namespace components {
 
 	enum class EComponentType : unsigned char {
@@ -14,8 +19,9 @@ namespace components {
 
 	class BaseComponent : public Updatable {
 	protected:
-		BaseComponent(const EComponentType& type):
-			m_type{ type }
+		explicit BaseComponent(const EComponentType& type, graphics::BaseObject* owner):
+			m_type{ type },
+			m_owner{ owner }
 		{ }
 
 	public:
@@ -23,6 +29,7 @@ namespace components {
 
 		const EComponentType& GetType() const { return m_type; }
 		const std::string& GetName() const { return m_name; }
+		graphics::BaseObject* GetOwner() const { return m_owner; }
 
 		virtual void Update(float deltaTime) override { }
 
@@ -31,6 +38,7 @@ namespace components {
 
 	private:
 		EComponentType m_type;
+		graphics::BaseObject* m_owner;
 
 	};
 

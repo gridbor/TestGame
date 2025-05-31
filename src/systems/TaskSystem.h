@@ -20,7 +20,7 @@ namespace task {
 
 	class TaskSystem {
 	public:
-		TaskSystem(unsigned int threadsCount = std::thread::hardware_concurrency());
+		explicit TaskSystem(unsigned int threadsCount = std::thread::hardware_concurrency());
 		~TaskSystem();
 
 		void Update();

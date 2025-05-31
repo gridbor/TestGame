@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "helpers/Coord.h"
 #include "components/BaseComponent.h"
+#include "components/PhysicsComponent.h"
 
 
 namespace graphics {
@@ -50,6 +51,23 @@ namespace graphics {
 			for (const auto& component : m_components) {
 				component->Update(deltaTime);
 			}
+		}
+
+		void AddComponent(const components::EComponentType& componentType) {
+			switch (componentType) {
+			case components::EComponentType::PHYSICS_MECHANICS:
+				m_components.push_back(std::make_unique<components::PhysicsComponent>(this));
+				break;
+			}
+		}
+		template<typename T>
+		T* GetComponent(const components::EComponentType& componentType) const {
+			for (auto it = m_components.begin(); it != m_components.end(); it++) {
+				if ((*it)->GetType() == componentType) {
+					return dynamic_cast<T*>(it->get());
+				}
+			}
+			return nullptr;
 		}
 
 		// TRANSLATE

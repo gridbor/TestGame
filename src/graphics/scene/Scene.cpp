@@ -3,6 +3,7 @@
 #include "tools/Logger.h"
 #include "graphics/objects/meshes/Quad.h"
 #include "graphics/objects/meshes/Cube.h"
+#include "components/PhysicsComponent.h"
 
 
 namespace scene {
@@ -31,6 +32,8 @@ namespace scene {
 		plane->SetScale(glm::vec3(100.f, 100.f, 1.f));
 		std::shared_ptr<mesh::Cube> cube = std::make_shared<mesh::Cube>();
 		cube->Initialize();
+		cube->SetPosition(glm::vec3(0.f, 10.f, 0.f));
+		cube->AddComponent(components::EComponentType::PHYSICS_MECHANICS);
 		m_objects.push_back(plane);
 		m_objects.push_back(cube);
 
@@ -47,6 +50,10 @@ namespace scene {
 	void Scene::Update(float deltaTime)
 	{
 		if (!m_updateEnabled) return;
+
+		for (const auto& obj : m_objects) {
+			obj->Update(deltaTime);
+		}
 	}
 
 	void Scene::Render()

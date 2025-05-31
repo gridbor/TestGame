@@ -37,7 +37,7 @@ void CameraManager::Initialize()
 	m_cameras["from_side"]->SetPosition(glm::vec3(10.f, 5.f, 15.f));
 	m_cameras["from_side"]->SetRotation(glm::quat(glm::vec3(-glm::pi<float>() * 0.15f, glm::pi<float>() * 0.19f, 0.f)));
 
-	SetCurrentCamera(m_cameras["main_camera"].get()); // m_cameras["from_side"].get());
+	SetCurrentCamera(m_cameras["main_camera"].get());
 }
 
 void CameraManager::Update(float deltaTime)

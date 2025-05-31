@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 
 namespace physics {
 
@@ -10,14 +12,14 @@ namespace physics {
 	public:
 		virtual ~Mechanics();
 
-	public:
-		inline static float worldGravity = 9.80665f;
+	protected:
+		glm::vec3 FreeFall(float deltaTime, const glm::vec3& position);
 
 	protected:
 		float m_mass;
-		float m_velocity;
-		float m_acceleration;
-		float m_gravity;
+		glm::vec3 m_velocity;
+		glm::vec3 m_acceleration;
+		glm::vec3 m_gravity;
 
 	};
 
