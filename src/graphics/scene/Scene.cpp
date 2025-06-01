@@ -4,6 +4,7 @@
 #include "graphics/objects/meshes/Quad.h"
 #include "graphics/objects/meshes/Cube.h"
 #include "components/PhysicsComponent.h"
+#include "components/CollisionComponent.h"
 
 
 namespace scene {
@@ -16,6 +17,8 @@ namespace scene {
 
 	Scene::~Scene()
 	{
+		m_transparentObjects.clear();
+		m_opaqueObjects.clear();
 		for (auto& obj : m_objects) {
 			obj.reset();
 		}
@@ -30,9 +33,11 @@ namespace scene {
 		plane->SetPosition(glm::vec3(0.f, -2.f, 0.f));
 		plane->SetRotation(glm::quat(glm::vec3(-glm::half_pi<float>(), 0.f, 0.f)));
 		plane->SetScale(glm::vec3(100.f, 100.f, 1.f));
+		plane->RefreshNormal();
 		std::shared_ptr<mesh::Cube> cube = std::make_shared<mesh::Cube>();
 		cube->Initialize();
 		cube->SetPosition(glm::vec3(0.f, 10.f, 0.f));
+		cube->AddComponent(components::EComponentType::COLLISION);
 		cube->AddComponent(components::EComponentType::PHYSICS_MECHANICS);
 		m_objects.push_back(plane);
 		m_objects.push_back(cube);
@@ -68,6 +73,24 @@ namespace scene {
 	{
 		if (m_renderAlpha == alpha) return;
 		m_renderAlpha = alpha;
+	}
+
+	std::vector<graphics::BaseObject*> Scene::GetIntersectObjects(graphics::BaseObject* target) const
+	{
+		if (target == nullptr) return {};
+
+		components::CollisionComponent* collision = target->GetComponent<components::CollisionComponent>(components::EComponentType::COLLISION);
+		if (collision == nullptr) return {};
+
+		std::vector<graphics::BaseObject*> intersectObjects;
+		for (const auto& object : m_objects) {
+			if (object.get() == target) continue;
+			// for test
+			if (collision->GetBoundingBox().min.y <= object->GetPosition().y) {
+				intersectObjects.push_back(object.get());
+			}
+		}
+		return intersectObjects;
 	}
 
 }

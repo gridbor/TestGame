@@ -8,6 +8,7 @@
 #include "helpers/Coord.h"
 #include "components/BaseComponent.h"
 #include "components/PhysicsComponent.h"
+#include "components/CollisionComponent.h"
 
 
 namespace graphics {
@@ -55,11 +56,15 @@ namespace graphics {
 
 		void AddComponent(const components::EComponentType& componentType) {
 			switch (componentType) {
+			case components::EComponentType::COLLISION:
+				m_components.push_back(std::make_unique<components::CollisionComponent>(this));
+				break;
 			case components::EComponentType::PHYSICS_MECHANICS:
 				m_components.push_back(std::make_unique<components::PhysicsComponent>(this));
 				break;
 			}
 		}
+
 		template<typename T>
 		T* GetComponent(const components::EComponentType& componentType) const {
 			for (auto it = m_components.begin(); it != m_components.end(); it++) {
@@ -121,6 +126,11 @@ namespace graphics {
 			glm::mat4 R = glm::mat4_cast(m_rotation);
 			glm::mat4 S = glm::scale(glm::mat4(1.f), m_scale);
 			m_matrix = T * R * S;
+
+			components::CollisionComponent* collision = GetComponent<components::CollisionComponent>(components::EComponentType::COLLISION);
+			if (collision != nullptr) {
+				collision->RefreshAABB(GetVertices(), m_matrix);
+			}
 		}
 
 		virtual void CalculateVectors() {

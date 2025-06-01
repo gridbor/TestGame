@@ -21,6 +21,8 @@ namespace graphics {
 		virtual void Initialize();
 		virtual void Render();
 
+		std::vector<glm::vec3> GetVertices() const;
+
 	protected:
 		template<class T>
 		void CreateBuffers(GLenum type, GLuint* buffersId, const std::vector<T>& vec, GLuint buffersCount = 1, GLenum usage = GL_STATIC_DRAW) {

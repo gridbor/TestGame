@@ -18,6 +18,8 @@ namespace components {
 
 	void PhysicsComponent::Update(float deltaTime)
 	{
+		if (!m_enabled) return;
+
 		BaseComponent::Update(deltaTime);
 
 		graphics::BaseObject* owner = GetOwner();

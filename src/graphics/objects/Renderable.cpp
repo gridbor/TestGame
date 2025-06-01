@@ -113,4 +113,13 @@ namespace graphics {
 		glDrawElements(m_elementsDrawMode, m_indices.size(), GL_UNSIGNED_INT, 0);
 	}
 
+	std::vector<glm::vec3> Renderable::GetVertices() const
+	{
+		std::vector<glm::vec3> vertices;
+		for (size_t i = 0; i < m_vertices.size(); i += m_stride) {
+			vertices.push_back(glm::vec3(m_vertices[i], m_vertices[i + 1], m_vertices[i + 2]));
+		}
+		return vertices;
+	}
+
 }

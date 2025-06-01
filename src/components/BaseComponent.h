@@ -22,7 +22,8 @@ namespace components {
 	protected:
 		explicit BaseComponent(const EComponentType& type, graphics::BaseObject* owner):
 			m_type{ type },
-			m_owner{ owner }
+			m_owner{ owner },
+			m_enabled{ true }
 		{ }
 
 	public:
@@ -34,8 +35,15 @@ namespace components {
 
 		virtual void Update(float deltaTime) override { }
 
+		virtual void SetEnabled(bool enable) {
+			if (m_enabled == enable) return;
+			m_enabled = enable;
+		}
+		virtual bool IsEnabled() const { return m_enabled; }
+
 	protected:
 		std::string m_name = "BaseComponent";
+		bool m_enabled;
 
 	private:
 		EComponentType m_type;

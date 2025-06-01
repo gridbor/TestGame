@@ -7,6 +7,11 @@
 #include "graphics/objects/BaseObject.h"
 
 
+namespace physics {
+	struct AABB;
+}
+
+
 namespace scene {
 
 	class Scene : public Updatable {
@@ -20,6 +25,8 @@ namespace scene {
 		void Render();
 
 		void SetRenderAlpha(bool alpha);
+
+		std::vector<graphics::BaseObject*> GetIntersectObjects(graphics::BaseObject* target) const;
 
 	private:
 		bool m_renderAlpha;

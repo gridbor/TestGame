@@ -19,7 +19,6 @@ namespace mesh {
 		virtual void Render() override;
 
 		void RefreshNormal();
-
 		const glm::vec3& GetNormal() const { return m_normal; }
 
 	private:

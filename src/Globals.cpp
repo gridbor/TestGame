@@ -15,6 +15,7 @@
 #include "graphics/objects/Shader.h"
 #include "datas/ImageData.h"
 #include "events/Events.h"
+#include "physics/Collision.h"
 
 
 Globals::Globals():
@@ -98,6 +99,16 @@ const MouseMove& Globals::MouseMoveDelta()
 const MouseWheel& Globals::MouseWheelDelta()
 {
 	return GetManager<InputManager>(EManagerType::INPUT)->GetMouseWheelDelta();
+}
+
+
+std::vector<graphics::BaseObject*> Globals::GetIntersectObjects(graphics::BaseObject* target)
+{
+	scene::Scene* scene = GetManager<scene::SceneManager>(EManagerType::SCENE)->GetCurrentScene();
+	if (scene != nullptr) {
+		return scene->GetIntersectObjects(target);
+	}
+	return {};
 }
 
 

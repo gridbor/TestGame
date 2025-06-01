@@ -28,6 +28,7 @@ class GameStorage;
 
 namespace graphics {
 	class Shader;
+	class BaseObject;
 }
 namespace events {
 	class BaseEvent;
@@ -39,6 +40,10 @@ struct MouseMove;
 struct MouseWheel;
 
 struct ImageData;
+
+namespace physics {
+	struct AABB;
+}
 
 
 class Globals {
@@ -75,6 +80,8 @@ public:
 	static bool KeyIsPressed(int key, const EInputButtonType& type);
 	static const MouseMove& MouseMoveDelta();
 	static const MouseWheel& MouseWheelDelta();
+
+	static std::vector<graphics::BaseObject*> GetIntersectObjects(graphics::BaseObject* target);
 
 	static float GetTime();
 	static float GetDeltaTime();
