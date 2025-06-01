@@ -3,7 +3,8 @@
 
 namespace mesh {
 
-	Cube::Cube()
+	Cube::Cube():
+		graphics::BaseObject{ graphics::EMeshType::CUBE }
 	{
 		LOG("Cube::constructor");
 	}

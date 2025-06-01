@@ -7,6 +7,7 @@
 namespace graphics {
 
 	Camera::Camera():
+		BaseObject{ EMeshType::CAMERA },
 		m_pitchLimits{ glm::radians<float>(-89.f), glm::radians<float>(89)},
 		m_isMovable{ true },
 		m_isRenderDisabled{ false }
@@ -49,7 +50,7 @@ namespace graphics {
 
 	void Camera::Update(float deltaTime)
 	{
-
+		BaseObject::Update(deltaTime);
 	}
 
 	void Camera::Render()

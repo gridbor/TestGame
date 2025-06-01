@@ -29,6 +29,7 @@ CameraManager::~CameraManager()
 void CameraManager::Initialize()
 {
 	m_cameras["main_camera"] = std::make_unique<graphics::Camera>();
+	m_cameras["main_camera"]->SetMovableType(graphics::EMovableType::DYNAMIC);
 	m_cameras["main_camera"]->Initialize();
 	m_cameras["main_camera"]->SetPosition(glm::vec3(0.f, 0.f, 3.f));
 

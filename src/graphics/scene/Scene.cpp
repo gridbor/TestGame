@@ -35,6 +35,7 @@ namespace scene {
 		plane->SetScale(glm::vec3(100.f, 100.f, 1.f));
 		plane->RefreshNormal();
 		std::shared_ptr<mesh::Cube> cube = std::make_shared<mesh::Cube>();
+		cube->SetMovableType(graphics::EMovableType::DYNAMIC);
 		cube->Initialize();
 		cube->SetPosition(glm::vec3(0.f, 10.f, 0.f));
 		cube->AddComponent(components::EComponentType::COLLISION);

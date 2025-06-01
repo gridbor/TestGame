@@ -13,9 +13,30 @@
 
 namespace graphics {
 
+	enum class EMeshType : unsigned char {
+		NONE = 0,
+		QUAD,
+		CUBE,
+		SPHERE,
+		CYLINDER,
+		CAPSULE,
+		CONE,
+		PYRAMID,
+		STATIC_MESH,
+		SKELETAL_MESH,
+		CAMERA
+	};
+
+	enum class EMovableType : unsigned char {
+		STATIC = 0,
+		DYNAMIC
+	};
+
 	class BaseObject : public Renderable, public Updatable, public Transform {
 	protected:
-		BaseObject() :
+		BaseObject(const EMeshType& meshType = EMeshType::NONE):
+			m_movableType{ EMovableType::STATIC },
+			m_meshType{ meshType },
 			m_manualMatrixUpdate{ false },
 			m_hasTransparency{ false },
 			m_coordVisible{ true },
@@ -39,20 +60,34 @@ namespace graphics {
 			m_components.clear();
 		}
 
+
 		virtual void Initialize() override {
 			if (m_coordVisible) m_coord->Initialize();
 			Renderable::Initialize();
 		}
+
 		virtual void Render() override {
 			if (m_coordVisible) m_coord->Render();
 			Renderable::Render();
 		}
 
 		virtual void Update(float deltaTime) override {
+			if (IsStatic() || !m_updateEnabled) return;
+
 			for (const auto& component : m_components) {
 				component->Update(deltaTime);
 			}
 		}
+
+
+		bool IsStatic() const { return m_movableType == EMovableType::STATIC; }
+		bool IsDynamic() const { return m_movableType == EMovableType::DYNAMIC; }
+
+		void SetMovableType(const EMovableType& movableType) {
+			if (m_movableType == movableType) return;
+			m_movableType = movableType;
+		}
+
 
 		void AddComponent(const components::EComponentType& componentType) {
 			switch (componentType) {
@@ -140,6 +175,7 @@ namespace graphics {
 		}
 
 	protected:
+		EMovableType m_movableType;
 		bool m_manualMatrixUpdate;
 		bool m_hasTransparency;
 		bool m_coordVisible;
@@ -152,8 +188,10 @@ namespace graphics {
 		std::vector<std::unique_ptr<components::BaseComponent>> m_components;
 
 	private:
+		EMeshType m_meshType;
 		// in radians
 		glm::vec3 m_eulerAngles;
 
 	};
+
 }

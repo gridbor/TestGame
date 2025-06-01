@@ -10,6 +10,7 @@
 namespace mesh {
 
 	Quad::Quad():
+		graphics::BaseObject{ graphics::EMeshType::QUAD },
 		m_normal{ }
 	{
 		LOG("Quad::constructor");
