@@ -102,6 +102,11 @@ const MouseWheel& Globals::MouseWheelDelta()
 }
 
 
+void Globals::RestartScene(const std::string& sceneName)
+{
+	GetManager<scene::SceneManager>(EManagerType::SCENE)->RestartScene(sceneName);
+}
+
 std::vector<graphics::BaseObject*> Globals::GetIntersectObjects(graphics::BaseObject* target)
 {
 	scene::Scene* scene = GetManager<scene::SceneManager>(EManagerType::SCENE)->GetCurrentScene();

@@ -29,6 +29,26 @@ namespace scene {
 		SetCurrentScene(m_scenes["main"].get());
 	}
 
+	void SceneManager::RestartScene(const std::string& sceneName)
+	{
+		auto it = m_scenes.find(sceneName);
+		if (it != m_scenes.end()) {
+			bool isCurrentScene = m_scenes[sceneName].get() == m_currentScene;
+			if (isCurrentScene) {
+				m_currentScene = nullptr;
+			}
+
+			m_scenes[sceneName].reset();
+
+			m_scenes[sceneName] = std::make_unique<Scene>();
+			m_scenes[sceneName]->Initialize();
+
+			if (isCurrentScene) {
+				SetCurrentScene(m_scenes[sceneName].get());
+			}
+		}
+	}
+
 	void SceneManager::Update(float deltaTime)
 	{
 		if (!m_updateEnabled) return;

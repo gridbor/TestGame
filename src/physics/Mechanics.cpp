@@ -15,10 +15,9 @@ namespace physics {
 	{
 	}
 
-	glm::vec3 Mechanics::FreeFall(float deltaTime, const glm::vec3& position)
+	void Mechanics::ApplyFreeFall(float deltaTime)
 	{
 		m_velocity += m_gravity * deltaTime;
-		return position + m_velocity * deltaTime;
 	}
 
 }

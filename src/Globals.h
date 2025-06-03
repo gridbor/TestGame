@@ -81,6 +81,8 @@ public:
 	static const MouseMove& MouseMoveDelta();
 	static const MouseWheel& MouseWheelDelta();
 
+	static void RestartScene(const std::string& sceneName);
+
 	static std::vector<graphics::BaseObject*> GetIntersectObjects(graphics::BaseObject* target);
 
 	static float GetTime();

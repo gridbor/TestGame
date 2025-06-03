@@ -18,6 +18,12 @@ namespace components {
 
 		virtual void Update(float deltaTime) override;
 
+		bool OnGround() const { return m_onGround; }
+		void SetOnGround(bool onGround);
+
+	private:
+		bool m_onGround;
+
 	};
 
 }

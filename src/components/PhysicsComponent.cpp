@@ -7,7 +7,8 @@ namespace components {
 
 	PhysicsComponent::PhysicsComponent(graphics::BaseObject* owner):
 		BaseComponent{ EComponentType::PHYSICS_MECHANICS, owner },
-		physics::Mechanics{ }
+		physics::Mechanics{ },
+		m_onGround{ false }
 	{
 		m_name = "PhysicsComponent";
 	}
@@ -24,7 +25,21 @@ namespace components {
 
 		graphics::BaseObject* owner = GetOwner();
 		if (owner == nullptr) return;
-		owner->SetPosition(FreeFall(deltaTime, owner->GetPosition()));
+
+		if (m_onGround) {
+			m_velocity.y = 0.f;
+		}
+		else {
+			ApplyFreeFall(deltaTime);
+		}
+		
+		owner->SetPosition(owner->GetPosition() + m_velocity * deltaTime);
+	}
+
+	void PhysicsComponent::SetOnGround(bool onGround)
+	{
+		if (m_onGround == onGround) return;
+		m_onGround = onGround;
 	}
 
 }

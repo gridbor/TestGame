@@ -80,6 +80,9 @@ namespace graphics {
 		}
 
 
+		const EMeshType& GetMeshType() const { return m_meshType; }
+
+
 		bool IsStatic() const { return m_movableType == EMovableType::STATIC; }
 		bool IsDynamic() const { return m_movableType == EMovableType::DYNAMIC; }
 

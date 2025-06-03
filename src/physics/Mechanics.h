@@ -13,7 +13,7 @@ namespace physics {
 		virtual ~Mechanics();
 
 	protected:
-		glm::vec3 FreeFall(float deltaTime, const glm::vec3& position);
+		void ApplyFreeFall(float deltaTime);
 
 	protected:
 		float m_mass;

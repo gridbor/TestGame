@@ -11,6 +11,12 @@ namespace physics {
 		glm::vec3 max{};
 	};
 
+	struct Plane {
+		glm::vec3 normal{ 0.f, 1.f, 0.f };
+		float distance = 0.f;
+	};
+
+
 	class Collision {
 	protected:
 		Collision();
@@ -23,6 +29,7 @@ namespace physics {
 
 	protected:
 		AABB m_boundingBox;
+		Plane m_plane;
 
 	};
 

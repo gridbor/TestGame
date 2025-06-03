@@ -16,6 +16,7 @@ namespace scene {
 		~SceneManager();
 
 		void Initialize();
+		void RestartScene(const std::string& sceneName);
 
 		virtual void Update(float deltaTime) override;
 		void SceneRender();

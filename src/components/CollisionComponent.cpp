@@ -1,5 +1,7 @@
 #include "CollisionComponent.h"
 
+#include <string>
+
 #include "Globals.h"
 #include "graphics/objects/BaseObject.h"
 #include "PhysicsComponent.h"
@@ -21,13 +23,17 @@ namespace components {
 	{
 		if (!m_enabled) return;
 
-		const physics::AABB& bbox = GetBoundingBox();
 		std::vector<graphics::BaseObject*> objects = Globals::GetIntersectObjects(GetOwner());
 		if (objects.empty()) return;
-		// for test
+
 		PhysicsComponent* physicsComponent = GetOwner()->GetComponent<PhysicsComponent>(EComponentType::PHYSICS_MECHANICS);
 		if (physicsComponent) {
-			physicsComponent->SetEnabled(false);
+			// test
+			if (!physicsComponent->OnGround()) {
+				float deltaY = m_boundingBox.min.y - objects[0]->GetComponent<CollisionComponent>(EComponentType::COLLISION)->GetBoundingBox().max.y;
+				GetOwner()->SetPosition(GetOwner()->GetPosition() - glm::vec3(0.f, deltaY, 0.f));
+			}
+			physicsComponent->SetOnGround(true);
 		}
 	}
 

@@ -30,6 +30,7 @@ namespace scene {
 	{
 		std::shared_ptr<mesh::Quad> plane = std::make_shared<mesh::Quad>();
 		plane->Initialize();
+		plane->AddComponent(components::EComponentType::COLLISION);
 		plane->SetPosition(glm::vec3(0.f, -2.f, 0.f));
 		plane->SetRotation(glm::quat(glm::vec3(-glm::half_pi<float>(), 0.f, 0.f)));
 		plane->SetScale(glm::vec3(100.f, 100.f, 1.f));
@@ -37,9 +38,9 @@ namespace scene {
 		std::shared_ptr<mesh::Cube> cube = std::make_shared<mesh::Cube>();
 		cube->SetMovableType(graphics::EMovableType::DYNAMIC);
 		cube->Initialize();
-		cube->SetPosition(glm::vec3(0.f, 10.f, 0.f));
 		cube->AddComponent(components::EComponentType::COLLISION);
 		cube->AddComponent(components::EComponentType::PHYSICS_MECHANICS);
+		cube->SetPosition(glm::vec3(0.f, 10.f, 0.f));
 		m_objects.push_back(plane);
 		m_objects.push_back(cube);
 
@@ -83,11 +84,16 @@ namespace scene {
 		components::CollisionComponent* collision = target->GetComponent<components::CollisionComponent>(components::EComponentType::COLLISION);
 		if (collision == nullptr) return {};
 
+		const auto& bbox = collision->GetBoundingBox();
 		std::vector<graphics::BaseObject*> intersectObjects;
 		for (const auto& object : m_objects) {
 			if (object.get() == target) continue;
-			// for test
-			if (collision->GetBoundingBox().min.y <= object->GetPosition().y) {
+			components::CollisionComponent* otherCollision = object->GetComponent<components::CollisionComponent>(components::EComponentType::COLLISION);
+			if (otherCollision) {
+				const auto& other_bbox = otherCollision->GetBoundingBox();
+				if (bbox.max.x < other_bbox.min.x || bbox.min.x > other_bbox.max.x) continue;
+				if (bbox.max.y < other_bbox.min.y || bbox.min.y > other_bbox.max.y) continue;
+				if (bbox.max.z < other_bbox.min.z || bbox.min.z > other_bbox.max.z) continue;
 				intersectObjects.push_back(object.get());
 			}
 		}

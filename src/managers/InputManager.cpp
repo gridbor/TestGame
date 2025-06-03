@@ -71,6 +71,7 @@ void InputManager::ButtonsHandler(const events::BaseEvent& event)
 		switch (key) {
 		case GLFW_KEY_ESCAPE: Globals::ExitGame(); break;
 		case GLFW_KEY_F2: Globals::Get()->GetGame()->ToggleWireMode(); break;
+		case GLFW_KEY_R: Globals::RestartScene("main"); break;
 		}
 	}
 }
