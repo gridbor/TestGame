@@ -6,7 +6,7 @@
 namespace components {
 
 	PhysicsComponent::PhysicsComponent(graphics::BaseObject* owner):
-		BaseComponent{ EComponentType::PHYSICS_MECHANICS, owner },
+		BaseComponentType{ owner },
 		physics::Mechanics{ },
 		m_onGround{ false }
 	{

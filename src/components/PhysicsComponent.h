@@ -11,7 +11,7 @@ namespace graphics {
 
 namespace components {
 
-	class PhysicsComponent : public BaseComponent, public physics::Mechanics {
+	class PhysicsComponent : public BaseComponentType<EComponentType::PHYSICS_MECHANICS>, public physics::Mechanics{
 	public:
 		PhysicsComponent(graphics::BaseObject* owner);
 		~PhysicsComponent();

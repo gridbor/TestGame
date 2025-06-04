@@ -104,10 +104,13 @@ namespace graphics {
 		}
 
 		template<typename T>
-		T* GetComponent(const components::EComponentType& componentType) const {
+		requires std::is_base_of_v<components::BaseComponent, T>
+		T* GetComponent() const {
+			const components::EComponentType targetType = T::s_type;
+
 			for (auto it = m_components.begin(); it != m_components.end(); it++) {
-				if ((*it)->GetType() == componentType) {
-					return dynamic_cast<T*>(it->get());
+				if ((*it)->GetType() == targetType) {
+					return static_cast<T*>(it->get());
 				}
 			}
 			return nullptr;
@@ -165,7 +168,7 @@ namespace graphics {
 			glm::mat4 S = glm::scale(glm::mat4(1.f), m_scale);
 			m_matrix = T * R * S;
 
-			components::CollisionComponent* collision = GetComponent<components::CollisionComponent>(components::EComponentType::COLLISION);
+			components::CollisionComponent* collision = GetComponent<components::CollisionComponent>();
 			if (collision != nullptr) {
 				collision->RefreshAABB(GetVertices(), m_matrix);
 			}

@@ -11,7 +11,7 @@ namespace graphics {
 
 namespace components {
 
-	class CollisionComponent : public BaseComponent, public physics::Collision {
+	class CollisionComponent : public BaseComponentType<EComponentType::COLLISION>, public physics::Collision {
 	public:
 		CollisionComponent(graphics::BaseObject* owner);
 		~CollisionComponent();

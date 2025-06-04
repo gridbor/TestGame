@@ -20,8 +20,7 @@ namespace components {
 
 	class BaseComponent : public Updatable {
 	protected:
-		explicit BaseComponent(const EComponentType& type, graphics::BaseObject* owner):
-			m_type{ type },
+		explicit BaseComponent(graphics::BaseObject* owner):
 			m_owner{ owner },
 			m_enabled{ true }
 		{ }
@@ -29,7 +28,7 @@ namespace components {
 	public:
 		virtual ~BaseComponent() = default;
 
-		const EComponentType& GetType() const { return m_type; }
+		virtual const EComponentType GetType() const = 0;
 		const std::string& GetName() const { return m_name; }
 		graphics::BaseObject* GetOwner() const { return m_owner; }
 
@@ -46,8 +45,21 @@ namespace components {
 		bool m_enabled;
 
 	private:
-		EComponentType m_type;
 		graphics::BaseObject* m_owner;
+
+	};
+
+
+	template <EComponentType componentType>
+	class BaseComponentType : public BaseComponent {
+	protected:
+		BaseComponentType(graphics::BaseObject* owner):
+			BaseComponent{ owner }
+		{ }
+
+	public:
+		const EComponentType GetType() const override { return componentType; }
+		static constexpr EComponentType s_type = componentType;
 
 	};
 

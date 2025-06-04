@@ -81,14 +81,14 @@ namespace scene {
 	{
 		if (target == nullptr) return {};
 
-		components::CollisionComponent* collision = target->GetComponent<components::CollisionComponent>(components::EComponentType::COLLISION);
+		components::CollisionComponent* collision = target->GetComponent<components::CollisionComponent>();
 		if (collision == nullptr) return {};
 
 		const auto& bbox = collision->GetBoundingBox();
 		std::vector<graphics::BaseObject*> intersectObjects;
 		for (const auto& object : m_objects) {
 			if (object.get() == target) continue;
-			components::CollisionComponent* otherCollision = object->GetComponent<components::CollisionComponent>(components::EComponentType::COLLISION);
+			components::CollisionComponent* otherCollision = object->GetComponent<components::CollisionComponent>();
 			if (otherCollision) {
 				const auto& other_bbox = otherCollision->GetBoundingBox();
 				if (bbox.max.x < other_bbox.min.x || bbox.min.x > other_bbox.max.x) continue;
