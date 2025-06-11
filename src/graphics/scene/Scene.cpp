@@ -91,9 +91,9 @@ namespace scene {
 			components::CollisionComponent* otherCollision = object->GetComponent<components::CollisionComponent>();
 			if (otherCollision) {
 				const auto& other_bbox = otherCollision->GetBoundingBox();
-				if (bbox.max.x < other_bbox.min.x || bbox.min.x > other_bbox.max.x) continue;
-				if (bbox.max.y < other_bbox.min.y || bbox.min.y > other_bbox.max.y) continue;
-				if (bbox.max.z < other_bbox.min.z || bbox.min.z > other_bbox.max.z) continue;
+				if (bbox.GetMax().x < other_bbox.GetMin().x || bbox.GetMin().x > other_bbox.GetMax().x) continue;
+				if (bbox.GetMax().y < other_bbox.GetMin().y || bbox.GetMin().y > other_bbox.GetMax().y) continue;
+				if (bbox.GetMax().z < other_bbox.GetMin().z || bbox.GetMin().z > other_bbox.GetMax().z) continue;
 				intersectObjects.push_back(object.get());
 			}
 		}

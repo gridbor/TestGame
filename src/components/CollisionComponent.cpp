@@ -31,7 +31,7 @@ namespace components {
 		if (physicsComponent) {
 			// test
 			if (!physicsComponent->OnGround()) {
-				float deltaY = m_boundingBox.min.y - objects[0]->GetComponent<CollisionComponent>()->GetBoundingBox().max.y;
+				float deltaY = m_boundingBox.GetMin().y - objects[0]->GetComponent<CollisionComponent>()->GetBoundingBox().GetMax().y;
 				GetOwner()->SetPosition(GetOwner()->GetPosition() - glm::vec3(0.f, deltaY, 0.f));
 			}
 			physicsComponent->SetOnGround(true);

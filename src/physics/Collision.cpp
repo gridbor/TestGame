@@ -20,13 +20,13 @@ namespace physics {
 			glm::vec4 transformed = modelMatrix * glm::vec4(vertex, 1.f);
 			glm::vec3 divided = transformed / transformed.w;
 			if (isFirst) {
-				m_boundingBox.min = divided;
-				m_boundingBox.max = divided;
+				m_boundingBox.SetMin(divided);
+				m_boundingBox.SetMax(divided);
 				isFirst = false;
 			}
 			else {
-				m_boundingBox.min = glm::min(m_boundingBox.min, divided);
-				m_boundingBox.max = glm::max(m_boundingBox.max, divided);
+				m_boundingBox.SetMin(glm::min(m_boundingBox.GetMin(), divided));
+				m_boundingBox.SetMax(glm::max(m_boundingBox.GetMax(), divided));
 			}
 		}
 	}

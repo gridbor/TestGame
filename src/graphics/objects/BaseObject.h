@@ -195,8 +195,7 @@ namespace graphics {
 
 	private:
 		EMeshType m_meshType;
-		// in radians
-		glm::vec3 m_eulerAngles;
+		glm::vec3 m_eulerAngles;  // Radians
 
 	};
 
