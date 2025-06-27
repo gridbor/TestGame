@@ -17,6 +17,7 @@ namespace graphics {
 
 		virtual void SetRotation(const glm::quat& rotation) = 0;
 		virtual const glm::quat& GetRotation() = 0;
+		virtual void RefreshRotationFromEuler() = 0;
 
 		virtual void SetScale(const glm::vec3& vec) = 0;
 		virtual const glm::vec3& GetScale() = 0;

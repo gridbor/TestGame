@@ -86,16 +86,16 @@ namespace graphics {
 	bool Camera::MousePitchYawUpdate(float pitch, float yaw)
 	{
 		SetYaw(GetYaw() + yaw);
-		SetPitch(GetPitch() + pitch);
-		if (GetPitch() < m_pitchLimits.first) {
+		if (GetPitch() + pitch < m_pitchLimits.first) {
 			SetPitch(m_pitchLimits.first);
 		}
-		if (GetPitch() > m_pitchLimits.second) {
+		else if (GetPitch() + pitch > m_pitchLimits.second) {
 			SetPitch(m_pitchLimits.second);
 		}
-		glm::quat quatPitch = glm::angleAxis(GetPitch(), glm::vec3(1.f, 0.f, 0.f));
-		glm::quat quatYaw = glm::angleAxis(GetYaw(), glm::vec3(0.f, 1.f, 0.f));
-		SetRotation(glm::normalize(quatYaw * quatPitch));
+		else {
+			SetPitch(GetPitch() + pitch);
+		}
+		RefreshRotationFromEuler();
 		return true;
 	}
 

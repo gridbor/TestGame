@@ -19,6 +19,7 @@ namespace graphics {
 
 		virtual void SetRotation(const glm::quat& rotation) override;
 		virtual const glm::quat& GetRotation() override { return m_rotation; }
+		virtual void RefreshRotationFromEuler() override { }
 
 		virtual void SetScale(const glm::vec3& vec) override;
 		virtual const glm::vec3& GetScale() override { return m_scale; }

@@ -131,6 +131,12 @@ namespace graphics {
 			if (!m_manualMatrixUpdate) UpdateMatrix();
 		}
 		virtual const glm::quat& GetRotation() override { return m_rotation; }
+		virtual void RefreshRotationFromEuler() override {
+			glm::quat quatYaw = glm::angleAxis(m_eulerAngles.y, glm::vec3(0.f, 1.f, 0.f));
+			glm::quat quatPitch = glm::angleAxis(m_eulerAngles.x, glm::vec3(1.f, 0.f, 0.f));
+			glm::quat quatRoll = glm::angleAxis(m_eulerAngles.z, glm::vec3(0.f, 0.f, 1.f));
+			SetRotation(glm::normalize(quatYaw * quatPitch * quatRoll));
+		}
 
 		virtual void SetPitch(float pitch) {
 			m_eulerAngles.x = fmodf(pitch, glm::two_pi<float>());
