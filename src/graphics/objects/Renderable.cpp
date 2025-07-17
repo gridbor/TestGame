@@ -63,7 +63,7 @@ namespace graphics {
 				if (imgData) {
 					GLint imgFormat = 0;
 					switch (imgData->channels) {
-					case 1: imgFormat = GL_R; break;
+					case 1: imgFormat = GL_RED; break;
 					case 2: imgFormat = GL_RG; break;
 					case 3: imgFormat = GL_RGB; break;
 					case 4: imgFormat = GL_RGBA; break;

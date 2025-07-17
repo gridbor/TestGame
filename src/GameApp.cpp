@@ -1,10 +1,6 @@
 #include "GameApp.h"
 
-#ifndef GLAD_GL_IMPLEMENTATION
-#define GLAD_GL_IMPLEMENTATION
-#include <glad/gl.h>
-#endif
-#undef GLAD_GL_IMPLEMENTATION
+#include <glad/glad.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
@@ -60,7 +56,7 @@ void GameApp::Initialize()
 	}
 
 	glfwMakeContextCurrent(m_window);
-	gladLoadGL(glfwGetProcAddress);
+	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
 	glfwSetWindowUserPointer(m_window, reinterpret_cast<void*>(this));
 

@@ -25,7 +25,7 @@ add_subdirectory("${third_path}/glfw")
 
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
 
-add_executable(${PROJECT_NAME} WIN32 ${source_files})
+add_executable(${PROJECT_NAME} WIN32 ${source_files} ${glad_lib}/src/glad.c)
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src" "${glad_lib}/include" "${third_path}/stb" "${third_path}/glm/glm_install/include")
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_gl_LIBRARY} glm::glm glfw)
